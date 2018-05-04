@@ -2,6 +2,7 @@ package br.com.baratella.service;
 
 import java.util.List;
 
+import br.com.baratella.exceptions.AplicacaoServiceException;
 import br.com.baratella.model.PessoaVO;
 
 /**
@@ -17,7 +18,7 @@ public interface IPessoaService {
 	 * 
 	 * @return Lista de pessoas
 	 */
-	List<PessoaVO> listarPessoas();
+	List<PessoaVO> listarPessoas() throws AplicacaoServiceException;
 
 	/**
 	 * Método: buscarPessoa Propósito: Serviço para buscar uma pessoa
@@ -25,5 +26,21 @@ public interface IPessoaService {
 	 * @param nome
 	 * @return pessoa
 	 */
-	PessoaVO buscarPessoa(String nome);
+	PessoaVO buscarPessoa(String cpf) throws AplicacaoServiceException;
+	
+	/**
+	 * 
+	 * Método: excluirPessoa
+	 * Propósito: Excluir uma pessoa
+	 * @param nome
+	 */
+	void excluirPessoa(String cpf) throws AplicacaoServiceException;
+	
+	/**
+	 * Método: adicionarPEssoa
+	 * Propósito: Adicionar uma pessoa
+	 * @param pessoa
+	 * @return
+	 */
+	PessoaVO adicionarPessoa(PessoaVO pessoa) throws AplicacaoServiceException;
 }
