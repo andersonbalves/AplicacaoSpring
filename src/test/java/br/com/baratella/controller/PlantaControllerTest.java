@@ -122,7 +122,7 @@ public class PlantaControllerTest {
 	public void excluirPlantaTest() throws Exception {
 		mockMvc.perform(delete("/planta/1")
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect(content().string(""));
 	}
 	
