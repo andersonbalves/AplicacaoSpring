@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="30" status="WARN" >
+	<Properties>
+		<Property name="log-path">logs</Property>
+        <Property name="LOG_PATTERN">[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</Property>
+	</Properties>
+	<Appenders>
+		<Console name="ConsoleAppender" target="SYSTEM_OUT">
+			<PatternLayout pattern="${LOG_PATTERN}"/>
+		</Console>
+		<File name="ApplicationFileAppender"
+			fileName="${log-path}/app_log.log">
+			<PatternLayout pattern="${LOG_PATTERN}"/>
+		</File>
+		<File name="SpringBootFileAppender"
+			fileName="${log-path}/springboot_log.log">
+			<PatternLayout pattern="${LOG_PATTERN}"/>
+		</File>
+	</Appenders>
+	<Loggers>
+		<Logger name="org.springframework" level="INFO"
+			additivity="false">
+			<AppenderRef ref="SpringBootFileAppender" />
+			<AppenderRef ref="ConsoleAppender" />
+		</Logger>
+		<Logger name="br.com.baratella" level="INFO" additivity="false">
+			<AppenderRef ref="ApplicationFileAppender" />
+			<AppenderRef ref="ConsoleAppender" />
+		</Logger>
+		<Root level="INFO">
+			<AppenderRef ref="ConsoleAppender" />
+		</Root>
+	</Loggers>
+</Configuration>
