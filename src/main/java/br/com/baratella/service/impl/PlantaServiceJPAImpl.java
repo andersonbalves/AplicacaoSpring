@@ -1,16 +1,18 @@
+/*
+ * 
+ */
 package br.com.baratella.service.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.baratella.entity.Planta;
-import br.com.baratella.jpa.PessoaRepository;
+import br.com.baratella.jpa.PlantaRepository;
 import br.com.baratella.service.IPlantaService;
 
 /**
- * Implementação Mock para os serviços de Pessoa
+ * Implementação para os serviços de Planta
  * 
  * @author Anderson
  *
@@ -18,33 +20,19 @@ import br.com.baratella.service.IPlantaService;
 @Service
 public class PlantaServiceJPAImpl implements IPlantaService {
 
-	/** InstÂncia única do serviço */
-	private static PlantaServiceJPAImpl pessoaServiceJPA;
-
-	@Autowired
-	private PessoaRepository repository;
+	private PlantaRepository repository;
 
 	/**
-	 * Método Construtor da Classe (Private para implementação de Singleton Pattern)
+	 * Método Construtor da Classe
 	 */
-	public PlantaServiceJPAImpl(PessoaRepository repository) {
+	public PlantaServiceJPAImpl(PlantaRepository repository) {
 		this.repository = repository;
 	}
 
 	/**
-	 * Método: getInstance Propósito: Retorna uma instância única do serviço de
-	 * Pessoa
+	 * Método: listarPlantas Propósito: Serviço de listar plantas
 	 * 
-	 * @return
-	 */
-	public static synchronized IPlantaService getInstance() {
-		return null;
-	}
-
-	/**
-	 * Método: listarPessoas Propósito: Serviço de listar pessoas (Mock)
-	 * 
-	 * @param pessoa
+	 * @param planta
 	 * @return
 	 * @see IPlantaService
 	 */
@@ -54,10 +42,10 @@ public class PlantaServiceJPAImpl implements IPlantaService {
 	}
 
 	/**
-	 * Método: listarPessoas Propósito: Serviço para buscar uma pessoa (Mock)
-	 * 
-	 * @param pessoa
-	 * @return
+	 * Método: listarPlantas Propósito: Serviço para buscar uma planta.
+	 *
+	 * @param nome  nome
+	 * @return  planta
 	 * @see IPlantaService
 	 */
 	@Override
@@ -65,11 +53,25 @@ public class PlantaServiceJPAImpl implements IPlantaService {
 		return repository.findByNome(nome);
 	}
 
+	/**
+	 * Método: excluirPlanta Propósito: Serviço para excluir uma planta.
+	 *
+	 * @param id  id
+	 * @return  planta
+	 * @see IPlantaService
+	 */
 	@Override
 	public void excluirPlanta(Long id) {
 		repository.deleteById(id);
 	}
 
+	/**
+	 * Método: adicionarPlanta Propósito: Serviço para adicionar uma planta.
+	 *
+	 * @param planta  planta
+	 * @return  planta
+	 * @see IPlantaService
+	 */
 	@Override
 	public void adicionarPlanta(Planta planta) {
 		if (!repository.existByNome(planta.getNome())) {
