@@ -53,12 +53,12 @@ public class PlantaController {
 	 * @return
 	 */
 	@RequestMapping(value = "/plantas", method = RequestMethod.GET)
-	public ResponseEntity<List<Planta>> listarPlantas() {
+	public ResponseEntity listarPlantas() {
 		logger.info("Listando plantas");
 		// Acessa o serviço de listar plantas
 		List<Planta> listaPlantas;
 		try {
-			listaPlantas = plantaService.listarPlanta();
+			listaPlantas = (List<Planta>) plantaService.listar();
 		} catch (AplicacaoServiceException ase) {
 			logger.error("Erro {} ao listar plantas", ase.getMessage(), ase );
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -76,11 +76,11 @@ public class PlantaController {
 	 * @return
 	 */
 	@RequestMapping(value = "/planta/{nome}", method = RequestMethod.GET)
-	public ResponseEntity<Planta> buscarPlanta(@PathVariable("nome") String nome) {
+	public ResponseEntity buscarPlanta(@PathVariable("nome") String nome) {
 		Planta planta = null;
 		logger.info("Buscando a planta {}", nome);
 		try {
-			planta = plantaService.buscarPlanta(nome);
+			planta = plantaService.buscar(nome);
 		} catch (AplicacaoSpringException ase) {
 			logger.error("Erro {} ao buscar uma planta", ase.getMessage(), ase );
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -96,13 +96,16 @@ public class PlantaController {
 	 * @return
 	 */
 	@RequestMapping(value = "/planta/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> excluirPlanta(@PathVariable("id") Long id) {
+	public ResponseEntity excluirPlanta(@PathVariable("id") Long id) {
 		logger.info("Deletando a planta com id {}", id);
 		try {
-			plantaService.excluirPlanta(id);
+			if (id == null ) {
+				throw new AplicacaoSpringException("O ID não pode ser null");
+			}
+			plantaService.excluir(id);
 		} catch (AplicacaoSpringException ase) {
 			logger.error("Erro {} ao excluir uma planta", ase.getMessage(), ase);
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(ase.getMessage(), HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -114,13 +117,59 @@ public class PlantaController {
 	 * @return
 	 */
 	@RequestMapping(value = "/planta", method = RequestMethod.POST)
-	public ResponseEntity<Planta> adicionarPlanta(@RequestBody Planta planta) {
+	public ResponseEntity adicionarPlanta(@RequestBody Planta planta) {
 		logger.info("Adicionando a planta {}", planta.getNome());
 		try {
-			plantaService.adicionarPlanta(planta);
+			
+			if (planta.getDataCatalogo() == null ) {
+				throw new AplicacaoSpringException("A data de catálogo não pode ser null");
+			}
+			if (planta.getNome() == null ) {
+				throw new AplicacaoSpringException("O Nome não pode ser null");
+			}
+			if (planta.getNomeCientifico() == null ) {
+				throw new AplicacaoSpringException("O Nome Científico não pode ser null");
+			}
+			
+			plantaService.adicionar(planta);
 		} catch (AplicacaoSpringException ase) {
 			logger.error("Erro {} ao adicionar uma planta", ase.getMessage(), ase );
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(ase.getMessage(), HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+	
+	/**
+	 * Método: adicionarPlanta
+	 * Propósito: Controlador REST para adiciona uma planta
+	 * @param planta
+	 * @return
+	 */
+	@RequestMapping(value = "/plantas", method = RequestMethod.POST)
+	public ResponseEntity adicionarPlantas(@RequestBody Planta... plantas) {
+		boolean valoresValidos = true;
+		for (Planta planta : plantas) {
+			logger.info("Adicionando a plantas {}", planta.getNome());
+
+			if (planta.getDataCatalogo() == null) {
+				valoresValidos = false;
+			}
+			if (planta.getNome() == null) {
+				valoresValidos = false;
+			}
+			if (planta.getNomeCientifico() == null) {
+				valoresValidos = false;
+			}
+
+		}
+		try {
+			if (!valoresValidos) {
+				throw new AplicacaoSpringException("Valores inválidos");
+			}
+			plantaService.adicionar(plantas);
+		} catch (AplicacaoSpringException ase) {
+			logger.error("Erro {} ao adicionar plantas", ase.getMessage(), ase);
+			return new ResponseEntity<>(ase.getMessage(), HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}

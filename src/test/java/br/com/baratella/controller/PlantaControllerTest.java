@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.baratella.entity.Planta;
 import br.com.baratella.service.IPlantaService;
+import br.com.baratella.util.TestUtil;
 
 /**
  * 
@@ -44,14 +45,7 @@ public class PlantaControllerTest {
 	
 	@Autowired
     private MockMvc mockMvc;
-	
-	Planta planta;
 
-	@PostConstruct
-	private void init() {
-		planta = new Planta("Orquidea","Orchidaceae", new Date());
-	}
-	
 	/**
 	 * Método: adicionarPlanta
 	 * Propósito: Controlador REST para adiciona uma planta
@@ -60,23 +54,33 @@ public class PlantaControllerTest {
 	 */
 	@Test
 	public void adicionarPlantaTest() throws Exception {
+		Planta planta = new Planta("Orquidea","Orchidaceae", new Date());
+		String json = TestUtil.objectToJson(planta);
 		mockMvc.perform(post("/planta")
-			.content(getPlantaAsJson())
+			.content(json)
 			.contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated());
 	}
-
+	
 	/**
-	 * Método: getPlantaAsJson
-	 * Propósito: Retorna a planta em formato JSON
+	 * Método: adicionarPlantas
+	 * Propósito: Controlador REST para adiciona plantas
+	 * @param planta
 	 * @return
-	 * @throws JsonProcessingException
 	 */
-	private String getPlantaAsJson() throws JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		String json = mapper.writeValueAsString(planta);
-		return json;
+	@Test
+	public void adicionarPlantasTest() throws Exception {
+		Planta[] plantas = {
+				new Planta("Orquidea","Orchidaceae", new Date()),
+				new Planta("Pinheiro","Pinus", new Date())};
+		
+		String json = TestUtil.objectToJson(plantas);
+		mockMvc.perform(post("/plantas")
+			.content(json)
+			.contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isCreated());
 	}
 
 	/**
@@ -102,7 +106,7 @@ public class PlantaControllerTest {
 	 */
 	@Test
 	public void buscarPlantaTest() throws Exception {
-		mockMvc.perform(get("/planta/" + planta.getNome())
+		mockMvc.perform(get("/planta/" + "Pinheiro")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));

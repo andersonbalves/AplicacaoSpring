@@ -116,5 +116,25 @@ public class PlantaServiceJPAImplTest {
 		
 		assertThat(encontrada.getNome()).isEqualTo(planta.getNome());
 	}
+	
+	/**
+	 * Método: adicionarPlantas
+	 * Propósito: Teste para adicionar plantas
+	 */
+	@Test
+	public void adicionarPlantas() {
+		Planta[] plantas = {
+				new Planta("Orquidea","Orchidaceae", new Date()),
+				new Planta("Pinheiro","Pinus", new Date())};
+		
+		for (Planta planta : plantas) {
+			entityManager.persist(planta);
+			entityManager.flush();
+			
+			Planta encontrada = repository.findByNome(planta.getNome());
+			
+			assertThat(encontrada.getNome()).isEqualTo(planta.getNome());
+		}
+	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import br.com.baratella.entity.Planta;
 import br.com.baratella.jpa.PlantaRepository;
 import br.com.baratella.service.IPlantaService;
+import br.com.baratella.service.exception.AplicacaoServiceException;
 
 /**
  * Implementação para os serviços de Planta
@@ -30,52 +31,70 @@ public class PlantaServiceJPAImpl implements IPlantaService {
 	}
 
 	/**
-	 * Método: listarPlantas Propósito: Serviço de listar plantas
+	 * Método: listar
+	 * Propósito: Serviço de listar plantas
 	 * 
 	 * @param planta
 	 * @return
 	 * @see IPlantaService
 	 */
 	@Override
-	public List<Planta> listarPlanta() {
+	public List<Planta> listar() {
 		return repository.findAll();
 	}
 
 	/**
-	 * Método: listarPlantas Propósito: Serviço para buscar uma planta.
+	 * Método: listar
+	 * Propósito: Serviço para buscar uma planta.
 	 *
 	 * @param nome  nome
 	 * @return  planta
 	 * @see IPlantaService
 	 */
 	@Override
-	public Planta buscarPlanta(String nome) {
+	public Planta buscar(String nome) {
 		return repository.findByNome(nome);
 	}
 
 	/**
-	 * Método: excluirPlanta Propósito: Serviço para excluir uma planta.
+	 * Método: excluir
+	 * Propósito: Serviço para excluir uma planta.
 	 *
 	 * @param id  id
 	 * @return  planta
 	 * @see IPlantaService
 	 */
 	@Override
-	public void excluirPlanta(Long id) {
+	public void excluir(Long id) {
 		repository.deleteById(id);
 	}
 
 	/**
-	 * Método: adicionarPlanta Propósito: Serviço para adicionar uma planta.
+	 * Método: adicionar Propósito: Serviço para adicionar uma planta.
 	 *
 	 * @param planta  planta
 	 * @return  planta
 	 * @see IPlantaService
 	 */
 	@Override
-	public void adicionarPlanta(Planta planta) {
+	public void adicionar(Planta planta) {
 		if (!repository.existByNome(planta.getNome())) {
 			repository.save(planta);
+		}
+	}
+
+	/**
+	 * Método: adicionar
+	 * Propósito: Serviço para adicionar plantas.
+	 *
+	 * @param planta  planta
+	 * @return  planta
+	 * @see IPlantaService
+	 */
+	@Override
+	public void adicionar(Planta... plantas) throws AplicacaoServiceException {
+		for (Planta planta : plantas) {
+			adicionar(planta);
 		}
 	}
 

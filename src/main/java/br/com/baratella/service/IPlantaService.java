@@ -14,33 +14,43 @@ import br.com.baratella.service.exception.AplicacaoServiceException;
 public interface IPlantaService {
 
 	/**
-	 * Método: listarPessoas Propósito: Serviço de listar pessoas
+	 * Método: listar
+	 * Propósito: Serviço de listar
 	 * 
 	 * @return Lista de pessoas
 	 */
-	List<Planta> listarPlanta() throws AplicacaoServiceException;
+	List<?> listar() throws AplicacaoServiceException;
 
 	/**
-	 * Método: buscarPessoa Propósito: Serviço para buscar uma pessoa
+	 * Método: buscar
+	 * Propósito: Serviço para buscar
 	 * 
 	 * @param nome
 	 * @return pessoa
 	 */
-	Planta buscarPlanta(String nome) throws AplicacaoServiceException;
+	Planta buscar(String nome) throws AplicacaoServiceException;
 	
 	/**
 	 * 
-	 * Método: excluirPessoa
-	 * Propósito: Excluir uma pessoa
+	 * Método: excluir
+	 * Propósito: Excluir 
 	 * @param nome
 	 */
-	void excluirPlanta(Long id) throws AplicacaoServiceException;
+	void excluir(Long id) throws AplicacaoServiceException;
 	
 	/**
-	 * Método: adicionarPEssoa
-	 * Propósito: Adicionar uma pessoa
+	 * Método: adiciona
+	 * Propósito: Adicionar
 	 * @param pessoa
 	 * @return
 	 */
-	void adicionarPlanta(Planta planta) throws AplicacaoServiceException;
+	void adicionar(Planta planta) throws AplicacaoServiceException;
+	
+	/**
+	 * Método: adiciona
+	 * Propósito: Adicionar
+	 * @param pessoa
+	 * @return
+	 */
+	void adicionar(Planta... plantas) throws AplicacaoServiceException;
 }
