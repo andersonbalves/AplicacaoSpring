@@ -2,8 +2,6 @@ package br.com.baratella.controller;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.baratella.exceptions.AplicacaoServiceException;
-import br.com.baratella.model.PessoaVO;
+import br.com.baratella.entity.Pessoa;
 import br.com.baratella.service.IPessoaService;
-import br.com.baratella.service.factory.PessoaServiceFactory;
+import br.com.baratella.service.exception.AplicacaoServiceException;
 
 /**
  * 
@@ -43,15 +40,11 @@ public class PessoaController {
 	 * 
 	 * Método Construtor da Classe
 	 */
-	public PessoaController() {
+	public PessoaController(IPessoaService pessoaService) {
 		super();
+		this.pessoaService = pessoaService;
 	}
 	
-	@PostConstruct
-	private void inicializar() {
-		pessoaService = PessoaServiceFactory.getPessoaService();
-	}
-
 	/**
 	 * Método: listarPessoas Propósito: Conrolador REST para o verbo GET, Retorna as
 	 * pessoas cadastradas
@@ -59,10 +52,10 @@ public class PessoaController {
 	 * @return
 	 */
 	@RequestMapping(value = "/pessoas", method = RequestMethod.GET)
-	public ResponseEntity<List<PessoaVO>> listarPessoas() {
+	public ResponseEntity<List<Pessoa>> listarPessoas() {
 		logger.info("Listando pessoas");
 		// Acessa o serviço de listar pessoas
-		List<PessoaVO> listaPessoas;
+		List<Pessoa> listaPessoas;
 		try {
 			listaPessoas = pessoaService.listarPessoas();
 		} catch (AplicacaoServiceException ase) {
@@ -70,7 +63,7 @@ public class PessoaController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		// Cria o objeto de response
-		ResponseEntity<List<PessoaVO>> response = new ResponseEntity<List<PessoaVO>>(listaPessoas, HttpStatus.OK);
+		ResponseEntity<List<Pessoa>> response = new ResponseEntity<List<Pessoa>>(listaPessoas, HttpStatus.OK);
 		return response;
 	}
 
@@ -82,8 +75,8 @@ public class PessoaController {
 	 * @return
 	 */
 	@RequestMapping(value = "/pessoa/{cpf}", method = RequestMethod.GET)
-	public ResponseEntity<PessoaVO> buscarPessoa(@PathVariable("cpf") String cpf) {
-		PessoaVO pessoa = null;
+	public ResponseEntity<Pessoa> buscarPessoa(@PathVariable("cpf") String cpf) {
+		Pessoa pessoa = null;
 		logger.info("Buscando a pessoa com cpf {}", cpf);
 		try {
 			pessoa = pessoaService.buscarPessoa(cpf);
@@ -91,7 +84,7 @@ public class PessoaController {
 			logger.error("Erro {} ao buscar uma pessoa", ase.getMessage(), ase );
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		ResponseEntity<PessoaVO> response = new ResponseEntity<PessoaVO>(pessoa, HttpStatus.OK);
+		ResponseEntity<Pessoa> response = new ResponseEntity<Pessoa>(pessoa, HttpStatus.OK);
 		return response;
 	}
 
@@ -120,7 +113,7 @@ public class PessoaController {
 	 * @return
 	 */
 	@RequestMapping(value = "/pessoa", method = RequestMethod.POST)
-	public ResponseEntity<PessoaVO> adicionarPessoa(@RequestBody PessoaVO pessoa) {
+	public ResponseEntity<Pessoa> adicionarPessoa(@RequestBody Pessoa pessoa) {
 		logger.info("Adicionando a pessoa {}", pessoa.getNome());
 		try {
 			pessoaService.adicionarPessoa(pessoa);
