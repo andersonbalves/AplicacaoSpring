@@ -2,8 +2,8 @@ package br.com.baratella.service;
 
 import java.util.List;
 
-import br.com.baratella.exceptions.AplicacaoServiceException;
-import br.com.baratella.model.PessoaVO;
+import br.com.baratella.entity.Pessoa;
+import br.com.baratella.service.exception.AplicacaoServiceException;
 
 /**
  * Interface de serviços para o tipo Pessoa
@@ -18,7 +18,7 @@ public interface IPessoaService {
 	 * 
 	 * @return Lista de pessoas
 	 */
-	List<PessoaVO> listarPessoas() throws AplicacaoServiceException;
+	List<Pessoa> listarPessoas() throws AplicacaoServiceException;
 
 	/**
 	 * Método: buscarPessoa Propósito: Serviço para buscar uma pessoa
@@ -26,7 +26,7 @@ public interface IPessoaService {
 	 * @param nome
 	 * @return pessoa
 	 */
-	PessoaVO buscarPessoa(String cpf) throws AplicacaoServiceException;
+	Pessoa buscarPessoa(String cpf) throws AplicacaoServiceException;
 	
 	/**
 	 * 
@@ -42,5 +42,5 @@ public interface IPessoaService {
 	 * @param pessoa
 	 * @return
 	 */
-	PessoaVO adicionarPessoa(PessoaVO pessoa) throws AplicacaoServiceException;
+	void adicionarPessoa(Pessoa pessoa) throws AplicacaoServiceException;
 }
