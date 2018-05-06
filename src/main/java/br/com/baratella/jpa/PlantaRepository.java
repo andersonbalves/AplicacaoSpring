@@ -20,7 +20,7 @@ import br.com.baratella.entity.Planta;
  */
 @Transactional
 @Repository
-public interface PessoaRepository extends JpaRepository<Planta, Long> {
+public interface PlantaRepository extends JpaRepository<Planta, Long> {
 	@Query("SELECT p.id FROM Planta p WHERE p.nome = :nome")
 	Long findIdByNome(@Param("nome") String nome);
 
