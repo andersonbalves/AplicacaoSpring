@@ -2,7 +2,7 @@ package br.com.baratella.service;
 
 import java.util.List;
 
-import br.com.baratella.entity.Pessoa;
+import br.com.baratella.entity.Planta;
 import br.com.baratella.service.exception.AplicacaoServiceException;
 
 /**
@@ -11,14 +11,14 @@ import br.com.baratella.service.exception.AplicacaoServiceException;
  * @author Anderson
  *
  */
-public interface IPessoaService {
+public interface IPlantaService {
 
 	/**
 	 * Método: listarPessoas Propósito: Serviço de listar pessoas
 	 * 
 	 * @return Lista de pessoas
 	 */
-	List<Pessoa> listarPessoas() throws AplicacaoServiceException;
+	List<Planta> listarPlanta() throws AplicacaoServiceException;
 
 	/**
 	 * Método: buscarPessoa Propósito: Serviço para buscar uma pessoa
@@ -26,7 +26,7 @@ public interface IPessoaService {
 	 * @param nome
 	 * @return pessoa
 	 */
-	Pessoa buscarPessoa(String cpf) throws AplicacaoServiceException;
+	Planta buscarPlanta(String nome) throws AplicacaoServiceException;
 	
 	/**
 	 * 
@@ -34,7 +34,7 @@ public interface IPessoaService {
 	 * Propósito: Excluir uma pessoa
 	 * @param nome
 	 */
-	void excluirPessoa(String cpf) throws AplicacaoServiceException;
+	void excluirPlanta(Long id) throws AplicacaoServiceException;
 	
 	/**
 	 * Método: adicionarPEssoa
@@ -42,5 +42,5 @@ public interface IPessoaService {
 	 * @param pessoa
 	 * @return
 	 */
-	void adicionarPessoa(Pessoa pessoa) throws AplicacaoServiceException;
+	void adicionarPlanta(Planta planta) throws AplicacaoServiceException;
 }

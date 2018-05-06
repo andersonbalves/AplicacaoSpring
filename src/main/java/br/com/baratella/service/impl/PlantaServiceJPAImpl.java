@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.baratella.entity.Pessoa;
+import br.com.baratella.entity.Planta;
 import br.com.baratella.jpa.PessoaRepository;
-import br.com.baratella.service.IPessoaService;
+import br.com.baratella.service.IPlantaService;
 
 /**
  * Implementação Mock para os serviços de Pessoa
@@ -16,10 +16,10 @@ import br.com.baratella.service.IPessoaService;
  *
  */
 @Service
-public class PessoaServiceJPAImpl implements IPessoaService {
+public class PlantaServiceJPAImpl implements IPlantaService {
 
 	/** InstÂncia única do serviço */
-	private static PessoaServiceJPAImpl pessoaServiceJPA;
+	private static PlantaServiceJPAImpl pessoaServiceJPA;
 
 	@Autowired
 	private PessoaRepository repository;
@@ -27,7 +27,7 @@ public class PessoaServiceJPAImpl implements IPessoaService {
 	/**
 	 * Método Construtor da Classe (Private para implementação de Singleton Pattern)
 	 */
-	public PessoaServiceJPAImpl(PessoaRepository repository) {
+	public PlantaServiceJPAImpl(PessoaRepository repository) {
 		this.repository = repository;
 	}
 
@@ -37,7 +37,7 @@ public class PessoaServiceJPAImpl implements IPessoaService {
 	 * 
 	 * @return
 	 */
-	public static synchronized IPessoaService getInstance() {
+	public static synchronized IPlantaService getInstance() {
 		return null;
 	}
 
@@ -46,10 +46,10 @@ public class PessoaServiceJPAImpl implements IPessoaService {
 	 * 
 	 * @param pessoa
 	 * @return
-	 * @see IPessoaService
+	 * @see IPlantaService
 	 */
 	@Override
-	public List<Pessoa> listarPessoas() {
+	public List<Planta> listarPlanta() {
 		return repository.findAll();
 	}
 
@@ -58,22 +58,22 @@ public class PessoaServiceJPAImpl implements IPessoaService {
 	 * 
 	 * @param pessoa
 	 * @return
-	 * @see IPessoaService
+	 * @see IPlantaService
 	 */
 	@Override
-	public Pessoa buscarPessoa(String cpf) {
-		return repository.getOne(cpf);
+	public Planta buscarPlanta(String nome) {
+		return repository.findByNome(nome);
 	}
 
 	@Override
-	public void excluirPessoa(String cpf) {
-		repository.deleteById(cpf);
+	public void excluirPlanta(Long id) {
+		repository.deleteById(id);
 	}
 
 	@Override
-	public void adicionarPessoa(Pessoa pessoa) {
-		if (!repository.existsById(pessoa.getCpf())) {
-			repository.save(pessoa);
+	public void adicionarPlanta(Planta planta) {
+		if (!repository.existByNome(planta.getNome())) {
+			repository.save(planta);
 		}
 	}
 
