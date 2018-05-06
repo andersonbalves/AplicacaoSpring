@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package br.com.baratella.jpa;
 
 import java.util.List;
@@ -11,25 +14,49 @@ import org.springframework.stereotype.Repository;
 
 import br.com.baratella.entity.Planta;
 
+// TODO: Auto-generated Javadoc
 /**
- * 
- * Interface de repositório JPA para Pessoa
- * 
- * @author Anderson
+ * Interface de repositório JPA para Pessoa.
  *
+ * @author Anderson
  */
 @Transactional
 @Repository
 public interface PlantaRepository extends JpaRepository<Planta, Long> {
+	
+	/**
+	 * Retorna o id pelo nome.
+	 *
+	 * @param nome nome
+	 * @return o id
+	 */
 	@Query("SELECT p.id FROM Planta p WHERE p.nome = :nome")
 	Long findIdByNome(@Param("nome") String nome);
 
+	/**
+	 * Retorna o nome pelo id.
+	 *
+	 * @param id id
+	 * @return  nome
+	 */
 	@Query("SELECT p.nome FROM Planta p WHERE p.id = :id")
 	String findNomeById(@Param("id") Long id);
 	
+	/**
+	 * Verifica se existe pelo nome.
+	 *
+	 * @param nome nome
+	 * @return true, caso encontrado
+	 */
 	@Query("SELECT COUNT(p)>0 FROM Planta p WHERE p.nome = :nome")
 	boolean existByNome(@Param("nome") String nome);
 	
+	/**
+	 * Busca pelo nome.
+	 *
+	 * @param nome  nome
+	 * @return  planta
+	 */
 	@Query("SELECT p FROM Planta p WHERE p.nome = :nome")
 	Planta findByNome(@Param("nome") String nome);
 }

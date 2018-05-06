@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import br.com.baratella.entity.Planta;
 import br.com.baratella.exception.AplicacaoSpringException;
 import br.com.baratella.service.IPlantaService;
 import br.com.baratella.service.exception.AplicacaoServiceException;
+import br.com.baratella.util.AplicacaoUtil;
 
 /**
  * 
@@ -26,6 +28,18 @@ import br.com.baratella.service.exception.AplicacaoServiceException;
  */
 @RestController
 public class PlantaController {
+
+	/** Variável ID para mapeamento de path */
+	private static final String PATH_VARIAVEL_ID = "/{id}";
+
+	/** Variável nome para mapeamento de path */
+	private static final String PATH_VARIAVEL_NOME = "/{nome}";
+
+	/** mapeamento de path plantas */
+	private static final String PATH_PLANTAS = "/plantas";
+
+	/** mapeamento de path planta */
+	private static final String PATH_PLANTA = "/planta";
 
 	/**
 	 * Serviço para o tipo planta
@@ -47,12 +61,13 @@ public class PlantaController {
 	}
 	
 	/**
-	 * Método: listarPlantas Propósito: Conrolador REST para o verbo GET, Retorna as
+	 * Método: listarPlantas
+	 * Propósito: Conrolador REST para o verbo GET, Retorna as
 	 * plantas cadastradas
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/plantas", method = RequestMethod.GET)
+	@RequestMapping(value = PATH_PLANTAS, method = RequestMethod.GET)
 	public ResponseEntity listarPlantas() {
 		logger.info("Listando plantas");
 		// Acessa o serviço de listar plantas
@@ -75,7 +90,7 @@ public class PlantaController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/planta/{nome}", method = RequestMethod.GET)
+	@RequestMapping(value = PATH_PLANTA + PATH_VARIAVEL_NOME, method = RequestMethod.GET)
 	public ResponseEntity buscarPlanta(@PathVariable("nome") String nome) {
 		Planta planta = null;
 		logger.info("Buscando a planta {}", nome);
@@ -95,7 +110,7 @@ public class PlantaController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/planta/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = PATH_PLANTA + PATH_VARIAVEL_ID, method = RequestMethod.DELETE)
 	public ResponseEntity excluirPlanta(@PathVariable("id") Long id) {
 		logger.info("Deletando a planta com id {}", id);
 		try {
@@ -116,22 +131,19 @@ public class PlantaController {
 	 * @param planta
 	 * @return
 	 */
-	@RequestMapping(value = "/planta", method = RequestMethod.POST)
+	@RequestMapping(value = PATH_PLANTA, method = RequestMethod.POST)
 	public ResponseEntity adicionarPlanta(@RequestBody Planta planta) {
 		logger.info("Adicionando a planta {}", planta.getNome());
 		try {
-			
-			if (planta.getDataCatalogo() == null ) {
-				throw new AplicacaoSpringException("A data de catálogo não pode ser null");
+			//VALIDA OS CAMPOS ENVIADOS PARA A INSERCAO
+			boolean valoresValidos = AplicacaoUtil.validaCamposObrigatorios(planta.getDataCatalogo(),
+					planta.getNome(), planta.getNomeCientifico());
+
+			if (valoresValidos) {
+				plantaService.adicionar(planta);
+			} else {
+				throw new AplicacaoSpringException("A planta " + planta.getNome() + " possui valores inválidos");
 			}
-			if (planta.getNome() == null ) {
-				throw new AplicacaoSpringException("O Nome não pode ser null");
-			}
-			if (planta.getNomeCientifico() == null ) {
-				throw new AplicacaoSpringException("O Nome Científico não pode ser null");
-			}
-			
-			plantaService.adicionar(planta);
 		} catch (AplicacaoSpringException ase) {
 			logger.error("Erro {} ao adicionar uma planta", ase.getMessage(), ase );
 			return new ResponseEntity<>(ase.getMessage(), HttpStatus.NOT_FOUND);
@@ -145,30 +157,24 @@ public class PlantaController {
 	 * @param planta
 	 * @return
 	 */
-	@RequestMapping(value = "/plantas", method = RequestMethod.POST)
+	@RequestMapping(value = PATH_PLANTAS, method = RequestMethod.POST)
 	public ResponseEntity adicionarPlantas(@RequestBody Planta... plantas) {
-		boolean valoresValidos = true;
-		for (Planta planta : plantas) {
-			logger.info("Adicionando a plantas {}", planta.getNome());
-
-			if (planta.getDataCatalogo() == null) {
-				valoresValidos = false;
-			}
-			if (planta.getNome() == null) {
-				valoresValidos = false;
-			}
-			if (planta.getNomeCientifico() == null) {
-				valoresValidos = false;
-			}
-
-		}
 		try {
-			if (!valoresValidos) {
-				throw new AplicacaoSpringException("Valores inválidos");
+			for (Planta planta : plantas) {
+				logger.info("Adicionando a planta {}", planta.getNome());
+				//VALIDA OS CAMPOS ENVIADOS PARA A INSERCAO
+				boolean valoresValidos = AplicacaoUtil.validaCamposObrigatorios(planta.getDataCatalogo(),
+						planta.getNome(), planta.getNomeCientifico());
+
+				if (!valoresValidos) {
+					throw new AplicacaoSpringException("A planta " + planta.getNome() + " possui valores inválidos");		
+				}
 			}
+			
 			plantaService.adicionar(plantas);
+
 		} catch (AplicacaoSpringException ase) {
-			logger.error("Erro {} ao adicionar plantas", ase.getMessage(), ase);
+			logger.error("Erro {} ao adicionar plantas ", ase.getMessage(), ase);
 			return new ResponseEntity<>(ase.getMessage(), HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(HttpStatus.CREATED);

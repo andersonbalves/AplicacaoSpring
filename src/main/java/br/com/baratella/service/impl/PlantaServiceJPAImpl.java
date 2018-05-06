@@ -21,6 +21,9 @@ import br.com.baratella.service.exception.AplicacaoServiceException;
 @Service
 public class PlantaServiceJPAImpl implements IPlantaService {
 
+	/**
+	 * Repositório JPA
+	 */
 	private PlantaRepository repository;
 
 	/**
@@ -70,7 +73,8 @@ public class PlantaServiceJPAImpl implements IPlantaService {
 	}
 
 	/**
-	 * Método: adicionar Propósito: Serviço para adicionar uma planta.
+	 * Método: adicionar
+	 * Propósito: Serviço para adicionar uma planta.
 	 *
 	 * @param planta  planta
 	 * @return  planta
@@ -93,6 +97,7 @@ public class PlantaServiceJPAImpl implements IPlantaService {
 	 */
 	@Override
 	public void adicionar(Planta... plantas) throws AplicacaoServiceException {
+		//Executa o serviço de adicionar plantas para cada planta
 		for (Planta planta : plantas) {
 			adicionar(planta);
 		}
