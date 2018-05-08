@@ -3,8 +3,6 @@
  */
 package br.com.baratella.jpa;
 
-import java.util.List;
-
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,9 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import br.com.baratella.entity.Planta;
 
-// TODO: Auto-generated Javadoc
 /**
- * Interface de repositório JPA para Pessoa.
+ * Interface de repositório JPA para Planta.
  *
  * @author Anderson
  */
