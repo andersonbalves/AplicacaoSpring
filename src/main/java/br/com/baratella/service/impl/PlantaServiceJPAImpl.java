@@ -5,6 +5,8 @@ package br.com.baratella.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import br.com.baratella.entity.Planta;
@@ -25,6 +27,11 @@ public class PlantaServiceJPAImpl implements IPlantaService {
 	 * Repositório JPA
 	 */
 	private PlantaRepository repository;
+	
+	/**
+	 * Logger da aplicação
+	 */
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * Método Construtor da Classe
@@ -43,6 +50,7 @@ public class PlantaServiceJPAImpl implements IPlantaService {
 	 */
 	@Override
 	public List<Planta> listar() {
+		logger.info("Buscando todas as plantas no banco de dados");
 		return repository.findAll();
 	}
 
@@ -56,6 +64,7 @@ public class PlantaServiceJPAImpl implements IPlantaService {
 	 */
 	@Override
 	public Planta buscar(String nome) {
+		logger.info("Buscando a planta {} no banco de dados", nome);
 		return repository.findByNome(nome);
 	}
 
@@ -69,6 +78,7 @@ public class PlantaServiceJPAImpl implements IPlantaService {
 	 */
 	@Override
 	public void excluir(Long id) {
+		logger.info("Excluindo a planta id:{} do banco de dados", Long.toString(id));
 		repository.deleteById(id);
 	}
 
@@ -82,6 +92,7 @@ public class PlantaServiceJPAImpl implements IPlantaService {
 	 */
 	@Override
 	public void adicionar(Planta planta) {
+		logger.info("Adicionando uma planta ao banco de dados");
 		if (!repository.existByNome(planta.getNome())) {
 			repository.save(planta);
 		}
@@ -97,6 +108,10 @@ public class PlantaServiceJPAImpl implements IPlantaService {
 	 */
 	@Override
 	public void adicionar(Planta... plantas) throws AplicacaoServiceException {
+		boolean temVarias = plantas.length >= 2;
+		logger.trace((temVarias ?
+				"Adicionando " +  plantas.length + " plantas ao banco de dados" :
+				"Adicionando uma planta ao banco de dados"));
 		//Executa o serviço de adicionar plantas para cada planta
 		for (Planta planta : plantas) {
 			adicionar(planta);
