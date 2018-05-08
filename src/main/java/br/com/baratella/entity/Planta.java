@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "planta", schema = "APLICACAO_SPRING")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Planta {
+public class Planta extends Organismo {
 
 	/** Atributo id. */
 	@Id
@@ -41,7 +41,7 @@ public class Planta {
 	/** Atributo data nascimento. */
 	@Column(name = "data_catalogo_planta")
 	Date dataCatalogo;
-
+	
 	/**
 	 * Método construtor do tipo planta.
 	 */
@@ -61,6 +61,17 @@ public class Planta {
 		this.nome = nome;
 		this.nomeCientifico = nomeCientifico;
 		this.dataCatalogo = dataCatalogo;
+	}
+	
+	/**
+	 * Método: logarNascimento
+	 * Propósito: Logar a criação de uma planta
+	 * 
+	 * @see Organismo
+	 */
+	@Override
+	protected void logarCriacao() {
+		getLogger().info("Uma planta foi instanciada");
 	}
 
 	/**
