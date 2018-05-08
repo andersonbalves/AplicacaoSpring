@@ -16,7 +16,7 @@ Adiciona uma planta à base de dados da aplicação
 {
     "nome": "Orquidea",
     "nomeCientifico": "Orchidaceae",
-    "dataCatalogo": "2017-11-24T02:00:00.000+0000"
+    "dataCatalogo": "2017-11-24"
 }
 ````
 
@@ -30,12 +30,12 @@ Adiciona uma lista de plantas à base de dados da aplicação
     {
         "nome": "Acerola",
         "nomeCientifico": "Malpighia emarginata",
-        "dataCatalogo": "2018-09-21T02:00:00.000+0000"
+        "dataCatalogo": "2018-09-21"
     },
     {
         "nome": "Lupulo",
         "nomeCientifico": "Humulus lupulus",
-        "dataCatalogo": "2018-01-25T02:00:00.000+0000"
+        "dataCatalogo": "2018-01-25"
     }
 ]
 ````
