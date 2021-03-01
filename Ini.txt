@@ -1,0 +1,6 @@
+[26/2 15:52] Thiago Cardoso: -Dhttp.proxyPort=8080
+-Dhttp.proxyHost=myproxy
+-Dhttp.proxyUser=mydomain\myusername
+-Dhttp.proxyPassword=mypassword
+-Dhttp.nonProxyHosts=localhost|127.0.0.1
+[26/2 15:53] Thiago Cardoso: -Dorg.eclipse.ecf.provider.filetransfer.excludeContributors=org.eclipse.ecf.provider.filetransfer.httpclient.
